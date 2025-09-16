@@ -12,12 +12,17 @@ const usernameSchema = z.object({
     .min(3, "Must be at least 3 characters"),
 });
 
-export type RegisterFormProps = {
-  className: string;
+export type PlayerRegisterFormProps = {
+  className?: string;
   title: string;
+  onPlayerRegister: (username: string) => void;
 };
 
-const RegisterForm = ({ className = "", title }: RegisterFormProps) => {
+const PlayerRegisterForm = ({
+  className = "",
+  title,
+  onPlayerRegister,
+}: PlayerRegisterFormProps) => {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
 
@@ -30,10 +35,12 @@ const RegisterForm = ({ className = "", title }: RegisterFormProps) => {
       setError(getErrorMessageFromZod(result.error));
       return;
     }
+
+    onPlayerRegister(result.data.username);
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
+    <form onSubmit={handleSubmit} className={`space-y-4 w-100 ${className}`}>
       <h1 className="text-center text-2xl">{title}</h1>
       <div>
         <label
@@ -57,4 +64,4 @@ const RegisterForm = ({ className = "", title }: RegisterFormProps) => {
   );
 };
 
-export default RegisterForm;
+export default PlayerRegisterForm;
