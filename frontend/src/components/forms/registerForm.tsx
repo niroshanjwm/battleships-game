@@ -14,9 +14,10 @@ const usernameSchema = z.object({
 
 export type RegisterFormProps = {
   className: string;
+  title: string;
 };
 
-const RegisterForm = ({ className = "" }: RegisterFormProps) => {
+const RegisterForm = ({ className = "", title }: RegisterFormProps) => {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
 
@@ -33,6 +34,7 @@ const RegisterForm = ({ className = "" }: RegisterFormProps) => {
 
   return (
     <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
+      <h1 className="text-center text-2xl">{title}</h1>
       <div>
         <label
           htmlFor="username"
@@ -50,11 +52,7 @@ const RegisterForm = ({ className = "" }: RegisterFormProps) => {
         {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
       </div>
 
-      <Button
-        type="submit"
-      >
-        Register
-      </Button>
+      <Button type="submit">Register</Button>
     </form>
   );
 };
