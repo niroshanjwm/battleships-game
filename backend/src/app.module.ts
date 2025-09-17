@@ -3,6 +3,8 @@ import { GameService } from './game/game.service';
 import { ConfigModule } from '@nestjs/config';
 import { GameController } from './game/game.controller';
 import { PrismaModule } from './prisma/prisma.module';
+import { ShipController } from './ship/ship.controller';
+import { ShipService } from './ship/ship.service';
 
 @Module({
   imports: [
@@ -11,7 +13,7 @@ import { PrismaModule } from './prisma/prisma.module';
     }),
     PrismaModule,
   ],
-  controllers: [GameController],
-  providers: [GameService],
+  controllers: [GameController, ShipController],
+  providers: [GameService, ShipService],
 })
 export class AppModule {}
