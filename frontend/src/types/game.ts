@@ -6,3 +6,15 @@ export enum GameStep {
   Play = "PLAY",
   Finished = "FINISHED",
 }
+
+export type CreateGameResponse = {
+  id: number;
+  playerA: string;
+  playerB: string;
+  createdAt: string;
+};
+
+export type CreateGamePayload = {
+  playerA: string;
+  playerB: string;
+};

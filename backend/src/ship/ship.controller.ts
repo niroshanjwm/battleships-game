@@ -6,7 +6,10 @@ export class ShipController {
   constructor(private ship: ShipService) {}
 
   @Get()
-  getAll() {
-    return this.ship.findAll();
+  async getAll() {
+    const ships = await this.ship.findAll();
+    return {
+      ships,
+    };
   }
 }

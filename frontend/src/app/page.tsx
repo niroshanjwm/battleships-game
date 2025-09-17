@@ -5,15 +5,18 @@ import ShipSetup from "@/components/game/shipSetup";
 import {
   setPlayerAUsername,
   setPlayerBUsername,
-} from "@/redux/slices/gameSlice";
-import { RootState } from "@/redux/store";
+} from "@/redux/slices/game/gameSlice";
+import { fetchShips, createGame } from "@/redux/slices/game/gameThunk";
+import { RootState, useAppDispatch } from "@/redux/store";
 import { GameStep } from "@/types/game";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const InitialPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const currentStep = useSelector((state: RootState) => state.game.currentStep);
+  const { currentStep, playerAUsername } = useSelector(
+    (state: RootState) => state.game
+  );
 
   const playerARegisterHandler = (username: string) => {
     dispatch(setPlayerAUsername(username));
@@ -21,6 +24,8 @@ const InitialPage = () => {
 
   const playerBRegisterHandler = (username: string) => {
     dispatch(setPlayerBUsername(username));
+    dispatch(createGame({ playerA: playerAUsername, playerB: username }));
+    dispatch(fetchShips());
   };
 
   const renderCurrentGameStep = (currentStep: GameStep) => {

@@ -40,6 +40,8 @@ npm run start
 
 3). Run frontend:
 
+Rename .env.sample to .env
+
 (Make sure to run `npm run dev` first, as NestJS needs to compile the application before you can run npm start.)
 ```bash
 cd frontend
