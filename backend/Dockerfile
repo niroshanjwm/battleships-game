@@ -13,5 +13,5 @@ COPY . .
 # Expose the port your NestJS app uses
 EXPOSE 8000
 
-# Start the NestJS app (for development)
-CMD ["npm", "run", "start:dev"]
+# Run migrations on container start
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run start:prod"]

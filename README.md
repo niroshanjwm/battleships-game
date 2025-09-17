@@ -28,8 +28,13 @@ docker run -d \
   postgres:16
   ```
 2). Run backend:
+
+Rename .env.sample to .env
+
 ```bash
 cd backend
+nvm use
+npx prisma migrate dev # Apply migrations
 npm run start
 ```
 
@@ -38,5 +43,6 @@ npm run start
 (Make sure to run `npm run dev` first, as NestJS needs to compile the application before you can run npm start.)
 ```bash
 cd frontend
+nvm use
 npm run dev
 ```
