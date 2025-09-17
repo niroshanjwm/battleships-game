@@ -1,0 +1,19 @@
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and lock file
+COPY package.json package-lock.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy all files
+COPY . .
+
+# Expose Next.js default port
+EXPOSE 3000
+
+# Start Next.js in development mode (or change to "start" for production)
+CMD ["npm", "run", "dev"]
