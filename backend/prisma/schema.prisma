@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -12,5 +13,12 @@ model Game {
   id    Int     @id @default(autoincrement())
   playerA  String
   playerB  String
+  createdAt DateTime @default(now())
+}
+
+model Ship {
+  id    Int     @id @default(autoincrement())
+  name  String
+  length  Int
   createdAt DateTime @default(now())
 }
