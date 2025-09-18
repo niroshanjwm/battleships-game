@@ -2,7 +2,6 @@
 import PlayerRegisterForm from "@/components/forms/playerRegisterForm";
 import FinalStats from "@/components/game/finalStats";
 import ShipSetup from "@/components/game/shipSetup";
-import { GridProvider } from "@/providers/gridProvider";
 import {
   setPlayerAUsername,
   setPlayerBUsername,
@@ -35,7 +34,7 @@ const InitialPage = () => {
         return (
           <PlayerRegisterForm
             key={currentStep}
-            title="Player A"
+            title={Player.PlayerA}
             onPlayerRegister={playerARegisterHandler}
           />
         );
@@ -44,23 +43,27 @@ const InitialPage = () => {
         return (
           <PlayerRegisterForm
             key={currentStep}
-            title="Player B"
+            title={Player.PlayerB}
             onPlayerRegister={playerBRegisterHandler}
           />
         );
 
       case GameStep.PlayerAShipSetup:
         return (
-          <GridProvider key={currentStep}>
-            <ShipSetup player={Player.PlayerA} username={playerAUsername} />
-          </GridProvider>
+          <ShipSetup
+            key={currentStep}
+            player={Player.PlayerA}
+            username={playerAUsername}
+          />
         );
 
       case GameStep.PlayerBShipSetup:
         return (
-          <GridProvider key={currentStep}>
-            <ShipSetup player={Player.PlayerA} username={playerBUsername} />
-          </GridProvider>
+          <ShipSetup
+            key={currentStep}
+            player={Player.PlayerA}
+            username={playerBUsername}
+          />
         );
 
       default:

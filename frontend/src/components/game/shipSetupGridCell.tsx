@@ -1,4 +1,6 @@
-import { useGridContext } from "@/providers/gridProvider";
+import { positionPlayerShip } from "@/redux/slices/game/gameSlice";
+import { useAppDispatch } from "@/redux/store";
+import { Player } from "@/types/game";
 import { Ship } from "@/types/ship";
 import { useRef } from "react";
 import { useDrop } from "react-dnd";
@@ -7,24 +9,30 @@ export type ShipSetupGridCellProps = {
   shipId: number | null;
   occupied: boolean;
   cordinate: { rowId: number; columnId: number };
+  player: Player;
 };
 const ShipSetupGridCell = ({
   shipId,
   occupied,
   cordinate: { rowId, columnId },
+  player,
 }: ShipSetupGridCellProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  const { canDropShip, dropShip } = useGridContext();
+  const dispatch = useAppDispatch();
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "ship",
     drop: (ship: Ship) => {
-      const { canDrop, message } = canDropShip(ship.length, rowId, columnId);
-      if (canDrop) {
-        dropShip(ship.id, ship.length, rowId, columnId);
-      }
-      return { status: canDrop, message };
+      dispatch(
+        positionPlayerShip({
+          player,
+          ship,
+          rowId,
+          columnId,
+        })
+      );
+      return { status: true, ship };
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),

@@ -1,7 +1,10 @@
-import { GameStep } from "@/types/game";
+import { GameStep, Player } from "@/types/game";
 import { Ship } from "@/types/ship";
 import { createSlice } from "@reduxjs/toolkit";
 import { createGame, fetchShips, saveShips } from "./gameThunk";
+import { GridCell } from "@/types/grid";
+import { GridLength } from "@/constants/grid";
+import { generateIntialGrid } from "@/utils/grid";
 
 type GameState = {
   loading: boolean;
@@ -9,7 +12,11 @@ type GameState = {
   gameId: number | null;
   currentStep: GameStep;
   playerAUsername: string;
+  playerAGrid: GridCell[][];
+  playerAGridError: string;
   playerBUsername: string;
+  playerBGrid: GridCell[][];
+  playerBGridError: string;
   ships: Ship[];
 };
 
@@ -19,8 +26,20 @@ const initialState: GameState = {
   gameId: null,
   currentStep: GameStep.PlayerARegister,
   playerAUsername: "",
+  playerAGrid: generateIntialGrid(GridLength),
+  playerAGridError: "",
   playerBUsername: "",
+  playerBGrid: generateIntialGrid(GridLength),
+  playerBGridError: "",
   ships: [],
+};
+
+const getPlayerGrid = (state: GameState, player: Player) => {
+  return player === Player.PlayerA ? state.playerAGrid : state.playerBGrid;
+};
+
+const getPlayerError = (state: GameState, player: Player) => {
+  return player === Player.PlayerA ? "playerAGridError" : "playerBGridError";
 };
 
 const gameSlice = createSlice({
@@ -37,6 +56,50 @@ const gameSlice = createSlice({
     setPlayerBUsername(state, action: { payload: string }) {
       state.playerBUsername = action.payload;
       state.currentStep = GameStep.PlayerAShipSetup;
+    },
+    positionPlayerShip(
+      state,
+      action: {
+        payload: {
+          player: Player;
+          ship: Ship;
+          rowId: number;
+          columnId: number;
+        };
+      }
+    ) {
+      const { rowId, columnId, ship, player } = action.payload;
+
+      const playerGrid = getPlayerGrid(state, player);
+      const errorField = getPlayerError(state, player);
+
+      state[errorField] = "";
+
+      /** Validate grid has enough space for ship */
+      if (columnId + ship.length > 10) {
+        state[
+          errorField
+        ] = `There is not enough space to put #${ship.id} ${ship.name}`;
+        return;
+      }
+
+      /** Validate dropping ship has overlap in grid */
+      for (let i = 0; i < ship.length; i++) {
+        const gridCell = playerGrid[rowId][columnId + i];
+        if (gridCell.occupied) {
+          state[
+            errorField
+          ] = `Ship #${ship.id} ${ship.name} is obstruct with another ship`;
+          return;
+        }
+      }
+
+      /** Drop ship into the grid */
+      for (let i = 0; i < ship.length; i++) {
+        const gridCell = playerGrid[rowId][columnId + i];
+        gridCell.occupied = true;
+        gridCell.shipId = ship.id;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -82,6 +145,10 @@ const gameSlice = createSlice({
   },
 });
 
-export const { setCurrentStep, setPlayerAUsername, setPlayerBUsername } =
-  gameSlice.actions;
+export const {
+  setCurrentStep,
+  setPlayerAUsername,
+  setPlayerBUsername,
+  positionPlayerShip,
+} = gameSlice.actions;
 export default gameSlice.reducer;
