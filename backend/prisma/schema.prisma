@@ -9,15 +9,37 @@ datasource db {
 }
 
 model Game {
-  id    Int     @id @default(autoincrement())
-  playerA  String
-  playerB  String
-  createdAt DateTime @default(now())
+  id        Int         @id @default(autoincrement())
+  playerA   String
+  playerB   String
+  createdAt DateTime    @default(now())
+
+  // Opposite relation
+  boards    GameBoard[]
 }
 
 model Ship {
-  id    Int     @id @default(autoincrement())
-  name  String
-  length  Int
+  id        Int         @id @default(autoincrement())
+  name      String
+  length    Int
+  createdAt DateTime    @default(now())
+
+  // Opposite relation
+  placements GameBoard[]
+}
+
+model GameBoard {
+  id        Int      @id @default(autoincrement())
+  player    String   @db.VarChar(7)
+  gameId    Int
+  row       Int
+  column    Int
+  shipId    Int?
+  isHit     Boolean
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  game      Game   @relation(fields: [gameId], references: [id])
+  ship      Ship?  @relation(fields: [shipId], references: [id])
 }

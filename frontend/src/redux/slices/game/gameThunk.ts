@@ -27,7 +27,7 @@ export const createGame = createAsyncThunk(
 export const saveShips = createAsyncThunk(
   "game/saveShips",
   async ({ gameId, player, grid }: SaveShipsPayload) => {
-    const response = await post<SaveShipsResponse>(`/game/ships`, {
+    const response = await post<SaveShipsResponse>(`/game/ship`, {
       gameId,
       player,
       grid,

@@ -4,8 +4,15 @@ meta {
   seq: 1
 }
 
-get {
+post {
   url: http://localhost:8000/api/ship
   body: json
   auth: none
+}
+
+body:json {
+  {
+    "playerA": "john",
+    "playerB": "jane"
+  }
 }

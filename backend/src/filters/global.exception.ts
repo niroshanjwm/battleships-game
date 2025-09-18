@@ -18,6 +18,7 @@ export class GlobalExceptionsFilter implements ExceptionFilter {
     const status = HttpStatus.INTERNAL_SERVER_ERROR;
 
     response.status(status).json({
+      field: exception.cause,
       statusCode: status,
       timestamp: new Date().toISOString(),
       message,
