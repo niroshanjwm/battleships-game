@@ -5,10 +5,15 @@ import { useGridContext } from "@/providers/gridProvider";
 import ShipSetupGrid from "@/components/game/shipSetupGrid";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import Button from "@/components/ui/button";
 
 const ShipSetup = () => {
   const { ships } = useSelector((state: RootState) => state.game);
   const { grid } = useGridContext();
+
+  const saveShipSetupHandler = () => {
+    console.log(grid, "save");
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -31,6 +36,7 @@ const ShipSetup = () => {
                 length={ship.length}
               />
             ))}
+            <Button onClick={() => saveShipSetupHandler()}>Save</Button>
           </div>
         </div>
       </div>

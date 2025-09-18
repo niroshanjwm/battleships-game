@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 
 export type ShipProps = {
@@ -7,22 +7,20 @@ export type ShipProps = {
   name: string;
 };
 
-type DropResult = {
-  x: number;
-  y: number;
-};
+type DropResult = { status: boolean; message: string };
 
 const Ship = ({ id, name, length }: ShipProps) => {
   const ref = useRef<HTMLDivElement>(null);
+
+  const [dropped, setDropped] = useState(false);
+
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "ship",
     item: { id, name, length },
-    end: (item, monitor) => {
+    end: (ship, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
-      if (item && dropResult) {
-        console.log(
-          `You dropped ${item.id} ${item.name} into ${dropResult.x}, ${dropResult.y}!`
-        );
+      if (ship && dropResult) {
+        setDropped(dropResult.status);
       }
     },
     collect: (monitor) => ({
@@ -42,12 +40,18 @@ const Ship = ({ id, name, length }: ShipProps) => {
 
   drag(ref);
 
+  if (dropped) {
+    return <div className="">{name} is dropped</div>;
+  }
+
   return (
     <div
       ref={ref}
       className={`ship ${isDragging ? "bg-white" : "bg-tranparent"}`}
     >
-      <div className="mt-2">{name}</div>
+      <div className="mt-2">
+        #{id} {name}
+      </div>
       <div className="flex mb-5">{generateShipLength(length)}</div>
     </div>
   );
