@@ -13,7 +13,7 @@ export const get = <T>(url: string): Promise<AxiosResponse<T>> => {
 
 export const post = <T>(
   url: string,
-  data: Record<string, string> = {}
+  data: Record<string, unknown> = {}
 ): Promise<AxiosResponse<T>> => {
   return axiosInstance.post<T>(url, data);
 };

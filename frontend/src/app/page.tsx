@@ -9,13 +9,13 @@ import {
 } from "@/redux/slices/game/gameSlice";
 import { fetchShips, createGame } from "@/redux/slices/game/gameThunk";
 import { RootState, useAppDispatch } from "@/redux/store";
-import { GameStep } from "@/types/game";
+import { GameStep, Player } from "@/types/game";
 import { useSelector } from "react-redux";
 
 const InitialPage = () => {
   const dispatch = useAppDispatch();
 
-  const { currentStep, playerAUsername } = useSelector(
+  const { currentStep, playerAUsername, playerBUsername } = useSelector(
     (state: RootState) => state.game
   );
 
@@ -52,14 +52,14 @@ const InitialPage = () => {
       case GameStep.PlayerAShipSetup:
         return (
           <GridProvider key={currentStep}>
-            <ShipSetup />
+            <ShipSetup player={Player.PlayerA} username={playerAUsername} />
           </GridProvider>
         );
 
       case GameStep.PlayerBShipSetup:
         return (
           <GridProvider key={currentStep}>
-            <ShipSetup />
+            <ShipSetup player={Player.PlayerA} username={playerBUsername} />
           </GridProvider>
         );
 

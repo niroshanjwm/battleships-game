@@ -34,6 +34,7 @@ export const GridProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const canDropShip = (shipLength: number, rowId: number, columnId: number) => {
+    debugger;
     // the length of ship from the position should be less that grid length
     if (columnId + shipLength > GridLength) {
       return {
@@ -44,7 +45,6 @@ export const GridProvider = ({ children }: { children: ReactNode }) => {
 
     // Check the any other ship is occupied in the grid
     for (let i = 0; i < shipLength; i++) {
-      console.log(grid[rowId][columnId + i], "grid[rowId][columnId + i]");
       if (grid[rowId][columnId + i].occupied) {
         return {
           canDrop: false,

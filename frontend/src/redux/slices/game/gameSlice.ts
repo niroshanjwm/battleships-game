@@ -1,7 +1,7 @@
 import { GameStep } from "@/types/game";
 import { Ship } from "@/types/ship";
 import { createSlice } from "@reduxjs/toolkit";
-import { createGame, fetchShips } from "./gameThunk";
+import { createGame, fetchShips, saveShips } from "./gameThunk";
 
 type GameState = {
   loading: boolean;
@@ -66,6 +66,18 @@ const gameSlice = createSlice({
       .addCase(createGame.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message ?? "Failed create game";
+      })
+      /** Save ships */
+      .addCase(saveShips.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(saveShips.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(saveShips.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message ?? "Unable to save the ships";
       });
   },
 });

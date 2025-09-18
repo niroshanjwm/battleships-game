@@ -38,9 +38,9 @@ const ShipSetupGridCell = ({
       ref={ref}
       className={`cell border h-12 w-12 flex items-center justify-center ${
         isOver ? "bg-white text-black" : ""
-      } ${occupied ? "bg-red-100 text-black" : ""}`}
+      } ${occupied ? "bg-white text-black" : ""}`}
     >
-      {occupied ? "Y" : "N"} {shipId}
+      {occupied ? `#${shipId}` : ""}
     </div>
   );
 };

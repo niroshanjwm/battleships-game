@@ -1,26 +1,38 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDrag } from "react-dnd";
 
 export type ShipProps = {
   id: number;
   length: number;
   name: string;
+  onShipDropError: (error: string) => void;
 };
 
 type DropResult = { status: boolean; message: string };
 
-const Ship = ({ id, name, length }: ShipProps) => {
+const Ship = ({ id, name, length, onShipDropError }: ShipProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [dropped, setDropped] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    onShipDropError(error);
+  }, [error, onShipDropError]);
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "ship",
-    item: { id, name, length },
+    item: () => {
+      setError("");
+      return { id, name, length };
+    },
     end: (ship, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
       if (ship && dropResult) {
         setDropped(dropResult.status);
+      }
+      if (!dropResult?.status) {
+        setError(dropResult?.message as string);
       }
     },
     collect: (monitor) => ({
