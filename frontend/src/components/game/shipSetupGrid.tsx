@@ -8,15 +8,15 @@ export type ShipSetupGridProps = {
 };
 
 const ShipSetupGrid = ({ grid, player }: ShipSetupGridProps) => {
-  return grid.map((row, rowId) => (
-    <div className="row w-auto flex" key={rowId}>
-      {row.map((cell, columnId) => {
+  return grid.map((row, rowIndex) => (
+    <div className="row w-auto flex" key={rowIndex}>
+      {row.map((column, columnIndex) => {
         return (
           <ShipSetupGridCell
-            key={`${rowId}-${columnId}`}
-            cordinate={{ rowId, columnId }}
-            occupied={cell.occupied}
-            shipId={cell.shipId}
+            key={`${row}-${columnIndex}`}
+            cordinate={{ row: rowIndex, column: columnIndex }}
+            occupied={column.occupied}
+            shipId={column.shipId}
             player={player}
           />
         );

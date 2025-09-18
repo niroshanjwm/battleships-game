@@ -8,13 +8,14 @@ import { useDrop } from "react-dnd";
 export type ShipSetupGridCellProps = {
   shipId: number | null;
   occupied: boolean;
-  cordinate: { rowId: number; columnId: number };
+  cordinate: { row: number; column: number };
   player: Player;
 };
+
 const ShipSetupGridCell = ({
   shipId,
   occupied,
-  cordinate: { rowId, columnId },
+  cordinate: { row, column },
   player,
 }: ShipSetupGridCellProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -28,8 +29,8 @@ const ShipSetupGridCell = ({
         positionPlayerShip({
           player,
           ship,
-          rowId,
-          columnId,
+          row,
+          column,
         })
       );
       return { status: true, ship };

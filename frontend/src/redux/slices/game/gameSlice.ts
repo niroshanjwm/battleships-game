@@ -63,12 +63,12 @@ const gameSlice = createSlice({
         payload: {
           player: Player;
           ship: Ship;
-          rowId: number;
-          columnId: number;
+          row: number;
+          column: number;
         };
       }
     ) {
-      const { rowId, columnId, ship, player } = action.payload;
+      const { row, column, ship, player } = action.payload;
 
       const playerGrid = getPlayerGrid(state, player);
       const errorField = getPlayerError(state, player);
@@ -76,7 +76,7 @@ const gameSlice = createSlice({
       state[errorField] = "";
 
       /** Validate grid has enough space for ship */
-      if (columnId + ship.length > 10) {
+      if (column + ship.length > 10) {
         state[
           errorField
         ] = `There is not enough space to put #${ship.id} ${ship.name}`;
@@ -85,7 +85,7 @@ const gameSlice = createSlice({
 
       /** Validate dropping ship has overlap in grid */
       for (let i = 0; i < ship.length; i++) {
-        const gridCell = playerGrid[rowId][columnId + i];
+        const gridCell = playerGrid[row][column + i];
         if (gridCell.occupied) {
           state[
             errorField
@@ -96,7 +96,7 @@ const gameSlice = createSlice({
 
       /** Drop ship into the grid */
       for (let i = 0; i < ship.length; i++) {
-        const gridCell = playerGrid[rowId][columnId + i];
+        const gridCell = playerGrid[row][column + i];
         gridCell.occupied = true;
         gridCell.shipId = ship.id;
       }
