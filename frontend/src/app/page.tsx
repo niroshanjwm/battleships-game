@@ -2,6 +2,7 @@
 import PlayerRegisterForm from "@/components/forms/playerRegisterForm";
 import FinalStats from "@/components/game/finalStats";
 import ShipSetup from "@/components/game/shipSetup";
+import { GridProvider } from "@/providers/gridProvider";
 import {
   setPlayerAUsername,
   setPlayerBUsername,
@@ -49,10 +50,18 @@ const InitialPage = () => {
         );
 
       case GameStep.PlayerAShipSetup:
-        return <ShipSetup key={currentStep} />;
+        return (
+          <GridProvider key={currentStep}>
+            <ShipSetup />
+          </GridProvider>
+        );
 
       case GameStep.PlayerBShipSetup:
-        return <ShipSetup key={currentStep} />;
+        return (
+          <GridProvider key={currentStep}>
+            <ShipSetup />
+          </GridProvider>
+        );
 
       default:
         return <FinalStats key={currentStep} />;

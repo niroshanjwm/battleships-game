@@ -54,7 +54,7 @@ const gameSlice = createSlice({
         state.loading = false;
         state.error = action.error.message ?? "Failed to fetch ships";
       })
-      /** Fetch ships */
+      /** Create game */
       .addCase(createGame.pending, (state) => {
         state.loading = true;
         state.error = null;
