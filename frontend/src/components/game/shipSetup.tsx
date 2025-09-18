@@ -20,7 +20,7 @@ const ShipSetup = ({ player, username }: ShipSetupProps) => {
   const playerGrid = useSelector((state: RootState) => {
     return player === Player.PlayerA
       ? state.game.playerAGrid
-      : state.game.playerAGrid;
+      : state.game.playerBGrid;
   });
 
   const playerError = useSelector((state: RootState) => {

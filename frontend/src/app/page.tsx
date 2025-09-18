@@ -1,6 +1,7 @@
 "use client";
 import PlayerRegisterForm from "@/components/forms/playerRegisterForm";
 import FinalStats from "@/components/game/finalStats";
+import GamePlay from "@/components/game/gamePlay";
 import ShipSetup from "@/components/game/shipSetup";
 import {
   setPlayerAUsername,
@@ -62,10 +63,13 @@ const InitialPage = () => {
         return (
           <ShipSetup
             key={currentStep}
-            player={Player.PlayerA}
+            player={Player.PlayerB}
             username={playerBUsername}
           />
         );
+
+      case GameStep.Play:
+        return <GamePlay key={currentStep} />;
 
       default:
         return <FinalStats key={currentStep} />;

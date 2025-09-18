@@ -8,11 +8,13 @@ import {
   SaveShipsResponse,
 } from "@/types/ship";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getPlayerError, getPlayerGrid } from "@/redux/slices/ship/shipHelpers";
+import { getPlayerGrid } from "@/redux/slices/ship/shipHelpers";
 import {
+  setCurrentStep,
   setPlayerGridError,
   setShipInPlayerGrid,
 } from "@/redux/slices/game/gameSlice";
+import { GameStep, Player } from "@/types/game";
 
 export const fetchShips = createAsyncThunk("game/fetchShips", async () => {
   const response = await get<FetchShipsResponse>(`/ship`);
@@ -21,12 +23,19 @@ export const fetchShips = createAsyncThunk("game/fetchShips", async () => {
 
 export const saveShips = createAsyncThunk(
   "ship/saveShips",
-  async ({ gameId, player, grid }: SaveShipsPayload) => {
+  async ({ gameId, player, grid }: SaveShipsPayload, { dispatch }) => {
     const response = await post<SaveShipsResponse>(`/game/ship`, {
       gameId,
       player,
       grid,
     });
+
+    if (player === Player.PlayerA) {
+      dispatch(setCurrentStep(GameStep.PlayerBShipSetup));
+    } else {
+      dispatch(setCurrentStep(GameStep.Play));
+    }
+
     return response.data;
   }
 );
