@@ -1,23 +1,26 @@
 import { GameStep, Player } from "@/types/game";
-import { Ship } from "@/types/ship";
+import { Ship as ShipType } from "@/types/ship";
 import { createSlice } from "@reduxjs/toolkit";
-import { createGame, fetchShips, saveShips } from "./gameThunk";
+import { createGame } from "@/redux/slices/game/gameThunk";
+import { fetchShips, saveShips } from "@/redux/slices/ship/shipThunk";
 import { GridCell } from "@/types/grid";
 import { GridLength } from "@/constants/grid";
 import { generateIntialGrid } from "@/utils/grid";
 
-type GameState = {
+export type GameState = {
   loading: boolean;
   error: string | null;
   gameId: number | null;
   currentStep: GameStep;
   playerAUsername: string;
   playerAGrid: GridCell[][];
+  playerAShips: ShipType[];
   playerAGridError: string;
   playerBUsername: string;
   playerBGrid: GridCell[][];
+  playerBShips: ShipType[];
   playerBGridError: string;
-  ships: Ship[];
+  ships: ShipType[];
 };
 
 const initialState: GameState = {
@@ -27,19 +30,13 @@ const initialState: GameState = {
   currentStep: GameStep.PlayerARegister,
   playerAUsername: "",
   playerAGrid: generateIntialGrid(GridLength),
+  playerAShips: [],
   playerAGridError: "",
   playerBUsername: "",
   playerBGrid: generateIntialGrid(GridLength),
+  playerBShips: [],
   playerBGridError: "",
   ships: [],
-};
-
-const getPlayerGrid = (state: GameState, player: Player) => {
-  return player === Player.PlayerA ? state.playerAGrid : state.playerBGrid;
-};
-
-const getPlayerError = (state: GameState, player: Player) => {
-  return player === Player.PlayerA ? "playerAGridError" : "playerBGridError";
 };
 
 const gameSlice = createSlice({
@@ -57,44 +54,39 @@ const gameSlice = createSlice({
       state.playerBUsername = action.payload;
       state.currentStep = GameStep.PlayerAShipSetup;
     },
-    positionPlayerShip(
+    setPlayerShips(
+      state,
+      action: { payload: { player: Player; ship: ShipType } }
+    ) {
+      const { player, ship } = action.payload;
+      const playerShipField =
+        player === Player.PlayerA ? "playerAShips" : "playerBShips";
+      state[playerShipField] = [...state[playerShipField], ship];
+    },
+    setPlayerGridError(
+      state,
+      action: { payload: { player: Player; message: string } }
+    ) {
+      const { player, message } = action.payload;
+      const playerGridErrorField =
+        player === Player.PlayerA ? "playerAGridError" : "playerBGridError";
+      state[playerGridErrorField] = message;
+    },
+    setShipInPlayerGrid(
       state,
       action: {
         payload: {
           player: Player;
-          ship: Ship;
+          ship: ShipType;
           row: number;
           column: number;
         };
       }
     ) {
-      const { row, column, ship, player } = action.payload;
+      const { player, ship, row, column } = action.payload;
+      const playerGrid =
+        player === Player.PlayerA ? state.playerAGrid : state.playerBGrid;
 
-      const playerGrid = getPlayerGrid(state, player);
-      const errorField = getPlayerError(state, player);
-
-      state[errorField] = "";
-
-      /** Validate grid has enough space for ship */
-      if (column + ship.length > 10) {
-        state[
-          errorField
-        ] = `There is not enough space to put #${ship.id} ${ship.name}`;
-        return;
-      }
-
-      /** Validate dropping ship has overlap in grid */
-      for (let i = 0; i < ship.length; i++) {
-        const gridCell = playerGrid[row][column + i];
-        if (gridCell.occupied) {
-          state[
-            errorField
-          ] = `Ship #${ship.id} ${ship.name} is obstruct with another ship`;
-          return;
-        }
-      }
-
-      /** Drop ship into the grid */
       for (let i = 0; i < ship.length; i++) {
         const gridCell = playerGrid[row][column + i];
         gridCell.occupied = true;
@@ -149,6 +141,8 @@ export const {
   setCurrentStep,
   setPlayerAUsername,
   setPlayerBUsername,
-  positionPlayerShip,
+  setPlayerShips,
+  setPlayerGridError,
+  setShipInPlayerGrid,
 } = gameSlice.actions;
 export default gameSlice.reducer;

@@ -6,7 +6,8 @@ import {
   setPlayerAUsername,
   setPlayerBUsername,
 } from "@/redux/slices/game/gameSlice";
-import { fetchShips, createGame } from "@/redux/slices/game/gameThunk";
+import { createGame } from "@/redux/slices/game/gameThunk";
+import { fetchShips } from "@/redux/slices/ship/shipThunk";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { GameStep, Player } from "@/types/game";
 import { useSelector } from "react-redux";

@@ -5,9 +5,8 @@ import ShipSetupGrid from "@/components/game/shipSetupGrid";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import Button from "@/components/ui/button";
-import { saveShips } from "@/redux/slices/game/gameThunk";
+import { saveShips } from "@/redux/slices/ship/shipThunk";
 import { Player } from "@/types/game";
-import { useState } from "react";
 
 export type ShipSetupProps = {
   player: Player;
@@ -30,8 +29,13 @@ const ShipSetup = ({ player, username }: ShipSetupProps) => {
       : state.game.playerBGridError;
   });
 
+  const playerShips = useSelector((state: RootState) => {
+    return player === Player.PlayerA
+      ? state.game.playerAShips
+      : state.game.playerBShips;
+  }).map((ship) => ship.id);
+
   const saveShipSetupHandler = () => {
-    console.log(gameId, player, playerGrid, "gameId, player, grid");
     dispatch(saveShips({ gameId, player, grid: playerGrid }));
   };
 
@@ -42,7 +46,7 @@ const ShipSetup = ({ player, username }: ShipSetupProps) => {
           <div className="text-2xl">
             {player}({username}) - Ship setup
           </div>
-          <p>Move ships in ship list to this grid</p>
+          <p>Move ships from ship list to this grid</p>
           <p className="text-sm text-red-500">{playerError}</p>
         </div>
         <div className="flex">
@@ -54,14 +58,16 @@ const ShipSetup = ({ player, username }: ShipSetupProps) => {
           <div className="w-1/2 flex justify-center items-center">
             <div className="p-1">
               <div className="text-2xl mb-2">Ship List</div>
-              {ships.map((ship) => (
-                <Ship
-                  id={ship.id}
-                  key={`${ship.id}`}
-                  name={ship.name}
-                  length={ship.length}
-                />
-              ))}
+              {ships
+                .filter((ship) => !playerShips.includes(ship.id))
+                .map((ship) => (
+                  <Ship
+                    id={ship.id}
+                    key={`${ship.id}`}
+                    name={ship.name}
+                    length={ship.length}
+                  />
+                ))}
               <Button className="mt-5" onClick={() => saveShipSetupHandler()}>
                 Save
               </Button>

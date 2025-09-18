@@ -1,4 +1,5 @@
-import { positionPlayerShip } from "@/redux/slices/game/gameSlice";
+import { setPlayerShips } from "@/redux/slices/game/gameSlice";
+import { dropShip } from "@/redux/slices/ship/shipThunk";
 import { useAppDispatch } from "@/redux/store";
 import { Player } from "@/types/game";
 import { Ship } from "@/types/ship";
@@ -26,14 +27,19 @@ const ShipSetupGridCell = ({
     accept: "ship",
     drop: (ship: Ship) => {
       dispatch(
-        positionPlayerShip({
+        dropShip({
           player,
           ship,
           row,
           column,
         })
-      );
-      return { status: true, ship };
+      )
+        .unwrap()
+        .then((result) => {
+          if (result.status) {
+            dispatch(setPlayerShips({ player, ship }));
+          }
+        });
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),

@@ -1,5 +1,4 @@
-import { Ship as ShipType } from "@/types/ship";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useDrag } from "react-dnd";
 
 export type ShipProps = {
@@ -8,23 +7,13 @@ export type ShipProps = {
   name: string;
 };
 
-type DropResult = { status: boolean; ship: ShipType };
-
 const Ship = ({ id, name, length }: ShipProps) => {
   const ref = useRef<HTMLDivElement>(null);
-
-  const [dropped, setDropped] = useState(false);
 
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "ship",
     item: () => {
       return { id, name, length };
-    },
-    end: (_ship, monitor) => {
-      const dropResult = monitor.getDropResult<DropResult>();
-      if (dropResult) {
-        setDropped(dropResult.status);
-      }
     },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -42,10 +31,6 @@ const Ship = ({ id, name, length }: ShipProps) => {
   };
 
   drag(ref);
-
-  if (dropped) {
-    return <div className="">{name} is dropped</div>;
-  }
 
   return (
     <div
