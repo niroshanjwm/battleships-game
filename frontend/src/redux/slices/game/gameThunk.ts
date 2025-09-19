@@ -34,7 +34,7 @@ export const playerHit = createAsyncThunk(
     dispatch(setBoardLock(true)); // this is to make sure only allow one shot for each players turn
     dispatch(setPlayerHit({ player, row, column }));
 
-    // await sleep(1000);
+    await sleep(1000);
     dispatch(setSwitchingPlayers(true));
 
     try {
