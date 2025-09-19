@@ -11,6 +11,7 @@ export type GameState = {
   loading: boolean;
   error: string | null;
   gameId: number | null;
+  turn: Player;
   currentStep: GameStep;
   playerAUsername: string;
   playerAGrid: GridCell[][];
@@ -27,6 +28,7 @@ const initialState: GameState = {
   loading: false,
   error: null,
   gameId: null,
+  turn: Player.PlayerA,
   currentStep: GameStep.PlayerARegister,
   playerAUsername: "",
   playerAGrid: generateIntialGrid(GridLength),
@@ -93,6 +95,9 @@ const gameSlice = createSlice({
         gridCell.shipId = ship.id;
       }
     },
+    setPlayerTurn(state, action: { payload: Player }) {
+      state.turn = action.payload;
+    },
   },
   extraReducers: (builder) => {
     /** Fetch ships */
@@ -144,5 +149,6 @@ export const {
   setPlayerShips,
   setPlayerGridError,
   setShipInPlayerGrid,
+  setPlayerTurn,
 } = gameSlice.actions;
 export default gameSlice.reducer;
