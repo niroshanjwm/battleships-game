@@ -45,8 +45,6 @@ export const playerHit = createAsyncThunk(
         player,
         row,
         column,
-        isHit: true,
-        shipId,
         gameId,
       });
     } catch (error) {

@@ -42,4 +42,6 @@ model GameBoard {
   // Relations
   game      Game   @relation(fields: [gameId], references: [id])
   ship      Ship?  @relation(fields: [shipId], references: [id])
+
+  @@unique([player, gameId, row, column])
 }
