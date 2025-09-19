@@ -35,7 +35,7 @@ const GamePlayGridCell = ({
   return (
     <div
       onClick={playerShotHandler}
-      className={`h-15 w-15 border border-white text-white text-center text-black flex items-center justify-center hover:bg-white hover:text-black ${
+      className={`h-10 w-10 border border-white text-white text-center text-black flex items-center justify-center hover:bg-white hover:text-black ${
         isShot ? "cursor-not-allowed" : "cursor-pointer"
       }`}
     >

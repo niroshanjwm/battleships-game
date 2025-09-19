@@ -34,4 +34,13 @@ export type PlayerHitPayload = {
 
 export type CreateGameHitResponse = {
   success: boolean;
+  sunkShips: [
+    {
+      shipId: number;
+      name: string;
+      length: number;
+      successfulHits: number;
+      isSunk: boolean;
+    }
+  ];
 };

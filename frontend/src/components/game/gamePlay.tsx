@@ -5,8 +5,13 @@ import { selectPlayerData } from "@/redux/slices/game/gameSelectors";
 
 const GamePlay = () => {
   const { turn } = useSelector((state: RootState) => state.game);
-  const { playerGrid, playerUsername, switchingPlayers, boardLock } =
-    useSelector(selectPlayerData(turn));
+  const {
+    playerGrid,
+    playerUsername,
+    switchingPlayers,
+    boardLock,
+    playerSunkShips,
+  } = useSelector(selectPlayerData(turn));
 
   return (
     <div>
@@ -18,6 +23,7 @@ const GamePlay = () => {
           player={turn}
           grid={playerGrid}
           playerUsername={playerUsername}
+          playerSunkShips={playerSunkShips}
         />
       )}
     </div>

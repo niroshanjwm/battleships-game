@@ -18,10 +18,12 @@ export type GameState = {
   playerAUsername: string;
   playerAGrid: GridCell[][];
   playerAShips: ShipType[];
+  playerASunkShips: ShipType[];
   playerAGridError: string;
   playerBUsername: string;
   playerBGrid: GridCell[][];
   playerBShips: ShipType[];
+  playerBSunkShips: ShipType[];
   playerBGridError: string;
   ships: ShipType[];
 };
@@ -37,10 +39,12 @@ const initialState: GameState = {
   playerAUsername: "",
   playerAGrid: generateIntialGrid(GridLength),
   playerAShips: [],
+  playerASunkShips: [],
   playerAGridError: "",
   playerBUsername: "",
   playerBGrid: generateIntialGrid(GridLength),
   playerBShips: [],
+  playerBSunkShips: [],
   playerBGridError: "",
   ships: [],
 };
@@ -120,6 +124,15 @@ const gameSlice = createSlice({
     setError(state, action: { payload: string }) {
       state.error = action.payload;
     },
+    setSunkShips(
+      state,
+      action: { payload: { player: Player; ships: ShipType[] } }
+    ) {
+      const { player, ships } = action.payload;
+      const playerSunkShips =
+        player === Player.PlayerA ? "playerASunkShips" : "playerBSunkShips";
+      state[playerSunkShips] = ships;
+    },
   },
   extraReducers: (builder) => {
     /** Fetch ships */
@@ -176,5 +189,6 @@ export const {
   setSwitchingPlayers,
   setBoardLock,
   setError,
+  setSunkShips,
 } = gameSlice.actions;
 export default gameSlice.reducer;

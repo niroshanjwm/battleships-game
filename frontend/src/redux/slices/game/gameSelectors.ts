@@ -14,6 +14,7 @@ export type PlayerDataSelector = {
   playerUsername: string;
   playerGrid: GridCell[][];
   playerShips: ShipType[];
+  playerSunkShips: ShipType[];
   playerGridError: string;
   ships: ShipType[];
 };
@@ -38,6 +39,7 @@ export const selectPlayerData =
         playerUsername: state.game.playerAUsername,
         playerGrid: state.game.playerAGrid,
         playerShips: state.game.playerAShips,
+        playerSunkShips: state.game.playerASunkShips,
         playerGridError: state.game.playerAGridError,
       };
     }
@@ -47,6 +49,7 @@ export const selectPlayerData =
       playerUsername: state.game.playerBUsername,
       playerGrid: state.game.playerBGrid,
       playerShips: state.game.playerBShips,
+      playerSunkShips: state.game.playerBSunkShips,
       playerGridError: state.game.playerBGridError,
     };
   };
