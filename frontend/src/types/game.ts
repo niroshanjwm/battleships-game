@@ -28,4 +28,10 @@ export type PlayerHitPayload = {
   player: Player;
   row: number;
   column: number;
+  shipId: number | null;
+  gameId: number | null;
+};
+
+export type CreateGameHitResponse = {
+  success: boolean;
 };

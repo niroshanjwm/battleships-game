@@ -1,7 +1,8 @@
 import { playerHit } from "@/redux/slices/game/gameThunk";
-import { useAppDispatch } from "@/redux/store";
+import { RootState, useAppDispatch } from "@/redux/store";
 import { Player } from "@/types/game";
 import { Ban, Check } from "lucide-react";
+import { useSelector } from "react-redux";
 
 export type GamePlayGridCellProps = {
   player: Player;
@@ -21,13 +22,14 @@ const GamePlayGridCell = ({
   boardLock,
 }: GamePlayGridCellProps) => {
   const dispatch = useAppDispatch();
+  const { gameId } = useSelector((state: RootState) => state.game);
 
   const playerShotHandler = () => {
     // this will prevent another hit on already hitted grid cells and maintain board lock
     if (isShot || boardLock) {
       return;
     }
-    dispatch(playerHit({ player, row, column }));
+    dispatch(playerHit({ player, row, column, shipId, gameId }));
   };
 
   return (

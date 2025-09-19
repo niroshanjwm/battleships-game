@@ -117,6 +117,9 @@ const gameSlice = createSlice({
     setBoardLock(state, action: { payload: boolean }) {
       state.boardLock = action.payload;
     },
+    setError(state, action: { payload: string }) {
+      state.error = action.payload;
+    },
   },
   extraReducers: (builder) => {
     /** Fetch ships */
@@ -172,5 +175,6 @@ export const {
   setPlayerHit,
   setSwitchingPlayers,
   setBoardLock,
+  setError,
 } = gameSlice.actions;
 export default gameSlice.reducer;
