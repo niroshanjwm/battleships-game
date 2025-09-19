@@ -1,10 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpException,
-  HttpStatus,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ZodValidationPipe } from 'src/pipelines/validation';
 import { CreateGameSchema } from './dto/create-game.dto';
 import { GameService } from 'src/game/game.service';
@@ -42,22 +36,12 @@ export class GameController {
     @Body(new ZodValidationPipe(CreateGameHitSchema))
     body: z.infer<typeof CreateGameHitSchema>,
   ) {
-    try {
-      await this.game.saveGameHits(body);
+    await this.game.saveGameHits(body);
+    const sunkShips = await this.ship.getSunkShips({
+      gameId: body.gameId,
+      player: body.player,
+    });
 
-      const shukShips = await this.ship.getSunkShips({
-        gameId: body.gameId,
-        player: body.player,
-      });
-
-      return { status: true, shukShips };
-    } catch (error) {
-      const throwedError = error as Error;
-      console.log(throwedError.message, throwedError.stack);
-      throw new HttpException(
-        'Unable to make hit. Please try again later',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    return { status: true, sunkShips };
   }
 }

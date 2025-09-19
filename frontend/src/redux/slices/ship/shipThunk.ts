@@ -27,7 +27,7 @@ export const saveShips = createAsyncThunk(
     const response = await post<SaveShipsResponse>(`/game/ship`, {
       gameId,
       player,
-      grid,
+      grid: grid.map((row) => row.map((column) => ({ shipId: column.shipId }))),
     });
 
     if (player === Player.PlayerA) {

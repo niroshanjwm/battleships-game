@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export const GridCellSchema = z.object({
-  occupied: z.boolean(),
   shipId: z.number().nullable(),
 });
 

@@ -7,4 +7,4 @@ export const CreateGameHitSchema = z.object({
   column: z.number().int().nonnegative('Column is required'),
 });
 
-export type CreateGamHitDto = z.infer<typeof CreateGameHitSchema>;
+export type CreateGameHitDto = z.infer<typeof CreateGameHitSchema>;
