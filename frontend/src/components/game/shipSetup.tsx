@@ -7,7 +7,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import Button from "@/components/ui/button";
 import { saveShips } from "@/redux/slices/ship/shipThunk";
 import { Player } from "@/types/game";
-import { selectPlayerData } from "@/redux/slices/game/gameSelectors";
+import { makeSelectPlayerData } from "@/redux/slices/game/gameSelectors";
 
 export type ShipSetupProps = {
   player: Player;
@@ -18,7 +18,7 @@ const ShipSetup = ({ player, username }: ShipSetupProps) => {
   const dispatch = useAppDispatch();
 
   const { ships, gameId, playerGrid, playerGridError, playerShips } =
-    useSelector(selectPlayerData(player));
+    useSelector(makeSelectPlayerData(player));
 
   const saveShipSetupHandler = () => {
     dispatch(saveShips({ gameId, player, grid: playerGrid }));

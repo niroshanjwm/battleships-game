@@ -26,6 +26,7 @@ export enum Player {
 
 export type PlayerHitPayload = {
   player: Player;
+  boardOwner: Player;
   row: number;
   column: number;
   shipId: number | null;

@@ -1,55 +1,48 @@
+import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
-import { GameStep, Player } from "@/types/game";
-import { GridCell } from "@/types/grid";
-import { Ship as ShipType } from "@/types/ship";
+import { Player } from "@/types/game";
 
-export type PlayerDataSelector = {
-  loading: boolean;
-  error: string | null;
-  gameId: number | null;
-  turn: Player;
-  switchingPlayers: boolean;
-  boardLock: boolean;
-  currentStep: GameStep;
-  playerUsername: string;
-  playerGrid: GridCell[][];
-  playerShips: ShipType[];
-  playerSunkShips: ShipType[];
-  playerGridError: string;
-  ships: ShipType[];
-};
+export const makeSelectPlayerData = (player: Player) =>
+  createSelector(
+    (state: RootState) => state.game,
+    (game) => {
+      const baseState = {
+        loading: game.loading,
+        error: game.error,
+        gameId: game.gameId,
+        turn: game.turn,
+        currentStep: game.currentStep,
+        ships: game.ships,
+        switchingPlayers: game.switchingPlayers,
+        boardLock: game.boardLock,
+      };
 
-export const selectPlayerData =
-  (player: Player) =>
-  (state: RootState): PlayerDataSelector => {
-    const baseState = {
-      loading: state.game.loading,
-      error: state.game.error,
-      gameId: state.game.gameId,
-      turn: state.game.turn,
-      currentStep: state.game.currentStep,
-      ships: state.game.ships,
-      switchingPlayers: state.game.switchingPlayers,
-      boardLock: state.game.boardLock,
-    };
+      if (player === Player.PlayerA) {
+        return {
+          ...baseState,
+          playerUsername: game.playerAUsername,
+          playerGrid: game.playerAGrid,
+          playerShips: game.playerAShips,
+          playerSunkShips: game.playerASunkShips,
+          playerGridError: game.playerAGridError,
 
-    if (player === Player.PlayerA) {
+          opponentGrid: game.playerBGrid,
+          boardOwner: Player.PlayerB,
+          opponentUsername: game.playerBUsername,
+        };
+      }
+
       return {
         ...baseState,
-        playerUsername: state.game.playerAUsername,
-        playerGrid: state.game.playerAGrid,
-        playerShips: state.game.playerAShips,
-        playerSunkShips: state.game.playerASunkShips,
-        playerGridError: state.game.playerAGridError,
+        playerUsername: game.playerBUsername,
+        playerGrid: game.playerBGrid,
+        playerShips: game.playerBShips,
+        playerSunkShips: game.playerBSunkShips,
+        playerGridError: game.playerBGridError,
+
+        opponentGrid: game.playerAGrid,
+        boardOwner: Player.PlayerA,
+        opponentUsername: game.playerAUsername,
       };
     }
-
-    return {
-      ...baseState,
-      playerUsername: state.game.playerBUsername,
-      playerGrid: state.game.playerBGrid,
-      playerShips: state.game.playerBShips,
-      playerSunkShips: state.game.playerBSunkShips,
-      playerGridError: state.game.playerBGridError,
-    };
-  };
+  );

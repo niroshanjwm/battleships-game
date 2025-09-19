@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 
 export type GamePlayGridCellProps = {
   player: Player;
+  boardOwner: Player;
   isShot: boolean;
   shipId: number | null;
   row: number;
@@ -15,6 +16,7 @@ export type GamePlayGridCellProps = {
 
 const GamePlayGridCell = ({
   player,
+  boardOwner,
   isShot,
   shipId,
   row,
@@ -29,7 +31,7 @@ const GamePlayGridCell = ({
     if (isShot || boardLock) {
       return;
     }
-    dispatch(playerHit({ player, row, column, shipId, gameId }));
+    dispatch(playerHit({ player, boardOwner, row, column, shipId, gameId }));
   };
 
   return (

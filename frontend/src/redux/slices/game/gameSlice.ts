@@ -108,11 +108,11 @@ const gameSlice = createSlice({
     },
     setPlayerHit(
       state,
-      action: { payload: { player: Player; row: number; column: number } }
+      action: { payload: { boardOwner: Player; row: number; column: number } }
     ) {
-      const { player, row, column } = action.payload;
+      const { boardOwner, row, column } = action.payload;
       const playerGrid =
-        player === Player.PlayerA ? state.playerAGrid : state.playerBGrid;
+        boardOwner === Player.PlayerA ? state.playerAGrid : state.playerBGrid;
       playerGrid[row][column].isShot = true;
     },
     setSwitchingPlayers(state, action: { payload: boolean }) {

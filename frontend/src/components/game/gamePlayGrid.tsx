@@ -2,9 +2,12 @@ import { Player } from "@/types/game";
 import { GridCell } from "@/types/grid";
 import GamePlayGridCell from "@/components/game/gamePlayGridCell";
 import { Ship } from "@/types/ship";
+import { Trophy } from "lucide-react";
 
 export type GamePlayGridProps = {
   player: Player;
+  opponentUsername: string;
+  boardOwner: Player;
   grid: GridCell[][];
   playerUsername: string;
   boardLock: boolean;
@@ -36,6 +39,8 @@ const calculateShotCounts = (
 
 const GamePlayGrid = ({
   player,
+  opponentUsername,
+  boardOwner,
   grid,
   playerUsername,
   boardLock,
@@ -49,25 +54,27 @@ const GamePlayGrid = ({
         {player}({playerUsername})
       </div>
 
-      <div className="flex justify-between bg-orange-700 px-2 py-1 rounded mb-2">
+      <div className="w-full">
+        <div className=" mb-2 mt-2">
+          {playerSunkShips.map((ship) => (
+            <div
+              className="w-auto my-2 flex items-center justify-start"
+              key={`${ship.id}-${ship.name}`}
+            >
+              <Trophy className="text-green-700 mr-1" />
+              {playerUsername} sunk {opponentUsername}&apos;s #{ship.id}{" "}
+              {ship.name}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex justify-between border border-orange-700 px-2 py-1 rounded mb-2">
         <div>Shots: {shots}</div>
         <div>Hits: {hits}</div>
         <div>Misses: {misses}</div>
       </div>
 
-      <div className="w-full">
-        <div className="text-xl text-center">Sunk Ships</div>
-        <div className="flex justify-center mb-2 mt-2">
-          {playerSunkShips.map((ship) => (
-            <div
-              className="border p-1 w-auto mx-1"
-              key={`${ship.id}-${ship.name}`}
-            >
-              #{ship.id} {ship.name}
-            </div>
-          ))}
-        </div>
-      </div>
       {grid.map((row, rowIndex) => {
         return (
           <div className="flex" key={`${rowIndex}`}>
@@ -77,6 +84,7 @@ const GamePlayGrid = ({
                   key={`${rowIndex}-${columnIndex}`}
                   boardLock={boardLock}
                   player={player}
+                  boardOwner={boardOwner}
                   row={rowIndex}
                   column={columnIndex}
                   isShot={column.isShot}

@@ -1,28 +1,34 @@
 import GamePlayGrid from "@/components/game/gamePlayGrid";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
-import { selectPlayerData } from "@/redux/slices/game/gameSelectors";
+import { makeSelectPlayerData } from "@/redux/slices/game/gameSelectors";
 
 const GamePlay = () => {
   const { turn } = useSelector((state: RootState) => state.game);
   const {
-    playerGrid,
     playerUsername,
     switchingPlayers,
     boardLock,
     playerSunkShips,
-  } = useSelector(selectPlayerData(turn));
+    opponentGrid,
+    boardOwner,
+    opponentUsername,
+  } = useSelector(makeSelectPlayerData(turn));
 
   return (
     <div>
       {switchingPlayers ? (
-        <div className="text-xl">Please wait, it’s your opponent’s turn…</div>
+        <div className="text-xl">
+          Please wait, it&apos;s your opponent’s turn
+        </div>
       ) : (
         <GamePlayGrid
           boardLock={boardLock}
           player={turn}
-          grid={playerGrid}
+          boardOwner={boardOwner}
+          grid={opponentGrid}
           playerUsername={playerUsername}
+          opponentUsername={opponentUsername}
           playerSunkShips={playerSunkShips}
         />
       )}

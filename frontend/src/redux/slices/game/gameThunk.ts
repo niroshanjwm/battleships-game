@@ -30,17 +30,18 @@ export const createGame = createAsyncThunk(
 
 export const playerHit = createAsyncThunk(
   "game/playerHit",
-  async ({ player, row, column, gameId }: PlayerHitPayload, { dispatch }) => {
-    dispatch(setBoardLock(true)); // this is to make sure only allow one shot for each players turn
-    dispatch(setPlayerHit({ player, row, column }));
-
-    await sleep(1000);
-    dispatch(setSwitchingPlayers(true));
+  async (
+    { player, boardOwner, row, column, gameId }: PlayerHitPayload,
+    { dispatch }
+  ) => {
+    // this is to make sure only allow one shot for each players turn
+    dispatch(setBoardLock(true));
+    dispatch(setPlayerHit({ boardOwner, row, column }));
 
     try {
-      // even the API is getting failed the game can be play continuously
+      // even the API is getting failed the game can be play continuously, only sunk ships are not available
       const response = await post<CreateGameHitResponse>(`/game/hit`, {
-        player,
+        player: boardOwner, // need to refactor to change the field name as boardOwner
         row,
         column,
         gameId,
@@ -64,6 +65,9 @@ export const playerHit = createAsyncThunk(
       dispatch(setError((error as Error).message));
     }
 
+    // adding sleeps to improve player turn transitions
+    await sleep(1000);
+    dispatch(setSwitchingPlayers(true));
     await sleep(2000);
     dispatch(
       setPlayerTurn(player === Player.PlayerA ? Player.PlayerB : Player.PlayerA)
