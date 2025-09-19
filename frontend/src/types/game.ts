@@ -23,3 +23,9 @@ export enum Player {
   PlayerA = "PlayerA",
   PlayerB = "PlayerB",
 }
+
+export type PlayerHitPayload = {
+  player: Player;
+  row: number;
+  column: number;
+};

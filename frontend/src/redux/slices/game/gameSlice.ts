@@ -12,6 +12,8 @@ export type GameState = {
   error: string | null;
   gameId: number | null;
   turn: Player;
+  switchingPlayers: boolean;
+  boardLock: boolean;
   currentStep: GameStep;
   playerAUsername: string;
   playerAGrid: GridCell[][];
@@ -29,6 +31,8 @@ const initialState: GameState = {
   error: null,
   gameId: null,
   turn: Player.PlayerA,
+  switchingPlayers: false,
+  boardLock: false,
   currentStep: GameStep.PlayerARegister,
   playerAUsername: "",
   playerAGrid: generateIntialGrid(GridLength),
@@ -98,6 +102,21 @@ const gameSlice = createSlice({
     setPlayerTurn(state, action: { payload: Player }) {
       state.turn = action.payload;
     },
+    setPlayerHit(
+      state,
+      action: { payload: { player: Player; row: number; column: number } }
+    ) {
+      const { player, row, column } = action.payload;
+      const playerGrid =
+        player === Player.PlayerA ? state.playerAGrid : state.playerBGrid;
+      playerGrid[row][column].isShot = true;
+    },
+    setSwitchingPlayers(state, action: { payload: boolean }) {
+      state.switchingPlayers = action.payload;
+    },
+    setBoardLock(state, action: { payload: boolean }) {
+      state.boardLock = action.payload;
+    },
   },
   extraReducers: (builder) => {
     /** Fetch ships */
@@ -137,7 +156,7 @@ const gameSlice = createSlice({
       })
       .addCase(saveShips.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message ?? "Unable to save the ships";
+        state.error = action.error.message ?? "Failed to save the ships";
       });
   },
 });
@@ -150,5 +169,8 @@ export const {
   setPlayerGridError,
   setShipInPlayerGrid,
   setPlayerTurn,
+  setPlayerHit,
+  setSwitchingPlayers,
+  setBoardLock,
 } = gameSlice.actions;
 export default gameSlice.reducer;

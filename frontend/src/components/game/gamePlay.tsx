@@ -1,24 +1,25 @@
 import GamePlayGrid from "@/components/game/gamePlayGrid";
-import { setPlayerTurn } from "@/redux/slices/game/gameSlice";
-import { RootState, useAppDispatch } from "@/redux/store";
-import { Player } from "@/types/game";
+import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
-import Button from "@/components/ui/button";
+import { selectPlayerData } from "@/redux/slices/game/gameSelectors";
 
 const GamePlay = () => {
-  const dispatch = useAppDispatch();
   const { turn } = useSelector((state: RootState) => state.game);
-
-  const playerTurnHandler = () => {
-    dispatch(
-      setPlayerTurn(turn === Player.PlayerA ? Player.PlayerB : Player.PlayerA)
-    );
-  };
+  const { playerGrid, playerUsername, switchingPlayers, boardLock } =
+    useSelector(selectPlayerData(turn));
 
   return (
     <div>
-      <GamePlayGrid player={turn} />
-      <Button onClick={playerTurnHandler}>Click</Button>
+      {switchingPlayers ? (
+        <div className="text-xl">Please wait, it’s your opponent’s turn…</div>
+      ) : (
+        <GamePlayGrid
+          boardLock={boardLock}
+          player={turn}
+          grid={playerGrid}
+          playerUsername={playerUsername}
+        />
+      )}
     </div>
   );
 };

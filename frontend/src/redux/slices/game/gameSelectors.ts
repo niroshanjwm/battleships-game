@@ -8,6 +8,8 @@ export type PlayerDataSelector = {
   error: string | null;
   gameId: number | null;
   turn: Player;
+  switchingPlayers: boolean;
+  boardLock: boolean;
   currentStep: GameStep;
   playerUsername: string;
   playerGrid: GridCell[][];
@@ -26,6 +28,8 @@ export const selectPlayerData =
       turn: state.game.turn,
       currentStep: state.game.currentStep,
       ships: state.game.ships,
+      switchingPlayers: state.game.switchingPlayers,
+      boardLock: state.game.boardLock,
     };
 
     if (player === Player.PlayerA) {
