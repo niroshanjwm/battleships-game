@@ -1,3 +1,5 @@
+import { Ship } from "@/types/ship";
+
 export enum GameStep {
   PlayerARegister = "PLAYER_A_REGISTER",
   PlayerAShipSetup = "PLAYER_A_SHIP_SETUP",
@@ -45,4 +47,23 @@ export type CreateGameHitResponse = {
     }
   ];
   isBoardOwnerDefeat: boolean;
+};
+
+export type GetGameStatsPayload = {
+  boardOwner: Player;
+  gameId: number;
+};
+
+export type GameStats = {
+  row: number;
+  column: number;
+  shipId: number | null;
+  isHit: boolean;
+  updatedAt: string;
+  ship: Ship | null;
+};
+
+export type GetGameStatsResponse = {
+  status: boolean;
+  hits: GameStats[];
 };

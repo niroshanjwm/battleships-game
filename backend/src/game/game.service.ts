@@ -77,6 +77,7 @@ export class GameService {
         updatedAt: true, // updatedAt is the time of the hit for each grid cell
         ship: {
           select: {
+            id: true,
             name: true,
             length: true,
           },
@@ -88,7 +89,7 @@ export class GameService {
         isHit: true,
       },
       orderBy: {
-        updatedAt: 'desc',
+        updatedAt: 'asc',
       },
     });
 

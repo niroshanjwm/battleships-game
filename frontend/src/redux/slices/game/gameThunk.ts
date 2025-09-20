@@ -1,11 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { post } from "@/services/http";
+import { get, post } from "@/services/http";
 import {
   CreateGamePayload,
   CreateGameResponse,
   CreateGameHitResponse,
   Player,
   PlayerHitPayload,
+  GetGameStatsPayload,
+  GetGameStatsResponse,
 } from "@/types/game";
 import {
   setSwitchingPlayers,
@@ -15,6 +17,7 @@ import {
   setError,
   setSunkShips,
   setWinner,
+  setWinnerGameStats
 } from "@/redux/slices/game/gameSlice";
 import { sleep } from "@/utils/time";
 
@@ -83,5 +86,15 @@ export const playerHit = createAsyncThunk(
     );
     dispatch(setSwitchingPlayers(false));
     dispatch(setBoardLock(false));
+  }
+);
+
+export const getGameStats = createAsyncThunk(
+  "game/getGameStats",
+  async ({ boardOwner, gameId }: GetGameStatsPayload, { dispatch }) => {
+    const response = await get<GetGameStatsResponse>(
+      `/game/stats?boardOwner=${boardOwner}&gameId=${gameId}`
+    );
+    dispatch(setWinnerGameStats(response.data.hits));
   }
 );

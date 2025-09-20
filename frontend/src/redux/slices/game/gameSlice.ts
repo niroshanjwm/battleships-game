@@ -1,7 +1,7 @@
-import { GameStep, Player } from "@/types/game";
+import { GameStats, GameStep, Player } from "@/types/game";
 import { Ship as ShipType } from "@/types/ship";
 import { createSlice } from "@reduxjs/toolkit";
-import { createGame } from "@/redux/slices/game/gameThunk";
+import { createGame, getGameStats } from "@/redux/slices/game/gameThunk";
 import { fetchShips, saveShips } from "@/redux/slices/ship/shipThunk";
 import { GridCell } from "@/types/grid";
 import { GridLength } from "@/constants/grid";
@@ -13,6 +13,7 @@ export type GameState = {
   gameId: number | null;
   turn: Player;
   winner: Player | null;
+  winnerGameStats: GameStats[];
   switchingPlayers: boolean;
   boardLock: boolean;
   currentStep: GameStep;
@@ -35,6 +36,7 @@ const initialState: GameState = {
   gameId: null,
   turn: Player.PlayerA,
   winner: null,
+  winnerGameStats: [],
   switchingPlayers: false,
   boardLock: false,
   currentStep: GameStep.PlayerARegister,
@@ -139,6 +141,12 @@ const gameSlice = createSlice({
       state.winner = action.payload;
       state.currentStep = GameStep.Finished;
     },
+    setWinnerGameStats(state, action: { payload: GameStats[] }) {
+      state.winnerGameStats = action.payload;
+    },
+    setDefaultState() {
+      return initialState;
+    },
   },
   extraReducers: (builder) => {
     /** Fetch ships */
@@ -197,5 +205,7 @@ export const {
   setError,
   setSunkShips,
   setWinner,
+  setWinnerGameStats,
+  setDefaultState,
 } = gameSlice.actions;
 export default gameSlice.reducer;

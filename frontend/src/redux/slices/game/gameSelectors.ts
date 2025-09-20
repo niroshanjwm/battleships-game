@@ -16,6 +16,7 @@ export const makeSelectPlayerData = (player: Player) =>
         switchingPlayers: game.switchingPlayers,
         boardLock: game.boardLock,
         winner: game.winner,
+        winnerGameStats: game.winnerGameStats,
       };
 
       if (player === Player.PlayerA) {
