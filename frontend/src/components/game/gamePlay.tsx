@@ -19,7 +19,7 @@ const GamePlay = () => {
     <div>
       {switchingPlayers ? (
         <div className="text-xl">
-          Please wait, it&apos;s your opponent’s turn
+          Please wait, it&apos;s your opponent&apos;s turn
         </div>
       ) : (
         <GamePlayGrid

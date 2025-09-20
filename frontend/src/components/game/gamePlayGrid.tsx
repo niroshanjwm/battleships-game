@@ -3,6 +3,7 @@ import { GridCell } from "@/types/grid";
 import GamePlayGridCell from "@/components/game/gamePlayGridCell";
 import { Ship } from "@/types/ship";
 import { Trophy } from "lucide-react";
+import { calculateShotCounts } from "@/utils/grid";
 
 export type GamePlayGridProps = {
   player: Player;
@@ -12,29 +13,6 @@ export type GamePlayGridProps = {
   playerUsername: string;
   boardLock: boolean;
   playerSunkShips: Ship[];
-};
-
-const calculateShotCounts = (
-  grid: GridCell[][]
-): {
-  shots: number;
-  hits: number;
-  misses: number;
-} => {
-  return grid.flat().reduce(
-    (shot, cell) => {
-      if (cell.isShot) {
-        shot.shots++;
-        if (cell.shipId !== null) {
-          shot.hits++;
-        } else {
-          shot.misses++;
-        }
-      }
-      return shot;
-    },
-    { shots: 0, hits: 0, misses: 0 }
-  );
 };
 
 const GamePlayGrid = ({

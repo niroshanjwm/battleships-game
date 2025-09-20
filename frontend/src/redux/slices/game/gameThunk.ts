@@ -14,6 +14,7 @@ import {
   setBoardLock,
   setError,
   setSunkShips,
+  setWinner,
 } from "@/redux/slices/game/gameSlice";
 import { sleep } from "@/utils/time";
 
@@ -61,6 +62,14 @@ export const playerHit = createAsyncThunk(
           ships: sunkShips,
         })
       );
+
+      const isBoardOwnerDefeated = response.data.isBoardOwnerDefeat;
+      if (isBoardOwnerDefeated) {
+        dispatch(setWinner(player));
+        // once the player is win, it should stop any other state updates, so we can safely return.
+        // (keep boardLock set to true is fine because we show different screen and state will be completely reset)
+        return;
+      }
     } catch (error) {
       dispatch(setError((error as Error).message));
     }

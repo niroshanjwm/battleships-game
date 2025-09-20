@@ -12,6 +12,7 @@ export type GameState = {
   error: string | null;
   gameId: number | null;
   turn: Player;
+  winner: Player | null;
   switchingPlayers: boolean;
   boardLock: boolean;
   currentStep: GameStep;
@@ -33,6 +34,7 @@ const initialState: GameState = {
   error: null,
   gameId: null,
   turn: Player.PlayerA,
+  winner: null,
   switchingPlayers: false,
   boardLock: false,
   currentStep: GameStep.PlayerARegister,
@@ -133,6 +135,10 @@ const gameSlice = createSlice({
         player === Player.PlayerA ? "playerASunkShips" : "playerBSunkShips";
       state[playerSunkShips] = ships;
     },
+    setWinner(state, action: { payload: Player }) {
+      state.winner = action.payload;
+      state.currentStep = GameStep.Finished;
+    },
   },
   extraReducers: (builder) => {
     /** Fetch ships */
@@ -190,5 +196,6 @@ export const {
   setBoardLock,
   setError,
   setSunkShips,
+  setWinner,
 } = gameSlice.actions;
 export default gameSlice.reducer;

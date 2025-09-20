@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 const InitialPage = () => {
   const dispatch = useAppDispatch();
 
-  const { currentStep, playerAUsername, playerBUsername } = useSelector(
+  const { currentStep, playerAUsername, playerBUsername, winner } = useSelector(
     (state: RootState) => state.game
   );
 
@@ -72,7 +72,7 @@ const InitialPage = () => {
         return <GamePlay key={currentStep} />;
 
       default:
-        return <FinalStats key={currentStep} />;
+        return <FinalStats key={currentStep} winner={winner} />;
     }
   };
 

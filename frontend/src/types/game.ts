@@ -44,4 +44,5 @@ export type CreateGameHitResponse = {
       isSunk: boolean;
     }
   ];
+  isBoardOwnerDefeat: boolean;
 };
