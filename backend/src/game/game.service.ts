@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateGameDto } from './dto/create-game.dto';
-import { CreateGameHitDto } from './dto/create-game-hit.dto';
+import { CreateGameDto } from '../dto/create-game.dto';
+import { CreateGameHitDto } from '../dto/create-game-hit.dto';
 
 @Injectable()
 export class GameService {

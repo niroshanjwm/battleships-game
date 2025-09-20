@@ -1,10 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ZodValidationPipe } from 'src/pipelines/validation';
-import { CreateGameSchema } from './dto/create-game.dto';
+import { CreateGameSchema } from '../dto/create-game.dto';
 import { GameService } from 'src/game/game.service';
 import { z } from 'zod';
-import { SaveShipSchema } from './dto/save-game-ships.dto';
-import { CreateGameHitSchema } from './dto/create-game-hit.dto';
+import { SaveShipSchema } from '../dto/save-game-ships.dto';
+import { CreateGameHitSchema } from '../dto/create-game-hit.dto';
 import { ShipService } from 'src/ship/ship.service';
 
 @Controller('game')

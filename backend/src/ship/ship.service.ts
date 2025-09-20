@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common';
-import { GetSunkShipDto } from 'src/game/dto/get-sunk-ship-dto';
-import { SaveShipDto } from 'src/game/dto/save-game-ships.dto';
+import { GetSunkShipDto } from 'src/dto/get-sunk-ship-dto';
+import { SaveShipDto } from 'src/dto/save-game-ships.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
