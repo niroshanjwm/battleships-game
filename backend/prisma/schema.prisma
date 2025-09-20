@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id        Int         @id @default(autoincrement())
+  playerA   String
+  playerB   String
+  createdAt DateTime    @default(now())
+
+  // Opposite relation
+  boards    GameBoard[]
+}
+
+model Ship {
+  id        Int         @id @default(autoincrement())
+  name      String
+  length    Int
+  createdAt DateTime    @default(now())
+
+  // Opposite relation
+  placements GameBoard[]
+}
+
+model GameBoard {
+  id        Int      @id @default(autoincrement())
+  // The value of this field either PlayerA or PlayerB, so varchar(7) is match with the character length
+  boardOwner    String   @db.VarChar(7)
+  gameId    Int
+  row       Int
+  column    Int
+  shipId    Int?
+  isHit     Boolean
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  game      Game   @relation(fields: [gameId], references: [id])
+  ship      Ship?  @relation(fields: [shipId], references: [id])
+
+  @@unique([boardOwner, gameId, row, column])
+}
