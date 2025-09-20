@@ -15,5 +15,5 @@ COPY . .
 # Expose Next.js default port
 EXPOSE 3000
 
-# Start Next.js in development mode (or change to "start" for production)
-CMD ["npm", "run", "dev"]
+# Start Next.js
+CMD ["npm", "run", "start"]
