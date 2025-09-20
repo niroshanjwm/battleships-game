@@ -37,11 +37,21 @@ export class GameController {
     body: z.infer<typeof CreateGameHitSchema>,
   ) {
     await this.game.saveGameHits(body);
-    const sunkShips = await this.ship.getSunkShips({
+    const sunkShipsPromise = this.ship.getSunkShips({
       gameId: body.gameId,
       boardOwner: body.boardOwner,
     });
 
-    return { status: true, sunkShips };
+    const isBoardOwnerDefeatPromise = this.game.ownerDefeat({
+      gameId: body.gameId,
+      boardOwner: body.boardOwner,
+    });
+
+    const [sunkShips, isBoardOwnerDefeat] = await Promise.all([
+      sunkShipsPromise,
+      isBoardOwnerDefeatPromise,
+    ]);
+
+    return { status: true, sunkShips, isBoardOwnerDefeat };
   }
 }

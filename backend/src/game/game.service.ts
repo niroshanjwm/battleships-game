@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateGameDto } from '../dto/create-game.dto';
 import { CreateGameHitDto } from '../dto/create-game-hit.dto';
+import { CheckOwnerDefeatDto } from 'src/dto/check-owner-defeat.dto';
 
 @Injectable()
 export class GameService {
@@ -37,5 +38,29 @@ export class GameService {
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
+
+  async ownerDefeat(checkOwnerDefeatDto: CheckOwnerDefeatDto) {
+    const { boardOwner, gameId } = checkOwnerDefeatDto;
+
+    const shipsInGameBoard = await this.prisma.gameBoard.findMany({
+      select: {
+        shipId: true,
+        isHit: true,
+        ship: {
+          select: {
+            length: true,
+          },
+        },
+      },
+      where: {
+        gameId,
+        boardOwner,
+        NOT: { shipId: null },
+      },
+    });
+
+    // If all the ships in board are hitted then owner is defeated
+    return shipsInGameBoard.every((ship) => ship.isHit);
   }
 }
