@@ -5,10 +5,12 @@ WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package.json package-lock.json ./
-RUN npm install --production
+RUN npm install
 
 # Copy the rest of the application
 COPY . .
+
+RUN npm run build
 
 # Expose the port your NestJS app uses
 EXPOSE 8000

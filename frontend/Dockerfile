@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:20-slim
 
 # Set working directory
 WORKDIR /app
@@ -12,8 +12,10 @@ RUN npm install
 # Copy all files
 COPY . .
 
+RUN npm run build
+
 # Expose Next.js default port
 EXPOSE 3000
 
-# Start Next.js in development mode (or change to "start" for production)
-CMD ["npm", "run", "dev"]
+# Start Next.js
+CMD ["npm", "run", "start"]
