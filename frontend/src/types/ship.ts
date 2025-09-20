@@ -13,7 +13,7 @@ export type FetchShipsResponse = {
 
 export type DropShipPayload = {
   player: Player;
-  ship: Ship;
+  ship: AlignedShip;
   row: number;
   column: number;
 };
@@ -31,4 +31,13 @@ export type SaveShipsPayload = {
 
 export type SaveShipsResponse = {
   success: boolean;
+};
+
+export enum ShipAlignment {
+  Horizontal = "HORIZONTAL",
+  Vertical = "VERTICAL",
+}
+
+export type AlignedShip = Ship & {
+  alignment: ShipAlignment;
 };

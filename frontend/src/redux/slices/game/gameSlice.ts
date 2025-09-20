@@ -1,7 +1,7 @@
 import { GameStats, GameStep, Player } from "@/types/game";
-import { Ship as ShipType } from "@/types/ship";
+import { Ship as ShipType, AlignedShip, ShipAlignment } from "@/types/ship";
 import { createSlice } from "@reduxjs/toolkit";
-import { createGame, getGameStats } from "@/redux/slices/game/gameThunk";
+import { createGame } from "@/redux/slices/game/gameThunk";
 import { fetchShips, saveShips } from "@/redux/slices/ship/shipThunk";
 import { GridCell } from "@/types/grid";
 import { GridLength } from "@/constants/grid";
@@ -91,7 +91,7 @@ const gameSlice = createSlice({
       action: {
         payload: {
           player: Player;
-          ship: ShipType;
+          ship: AlignedShip;
           row: number;
           column: number;
         };
@@ -102,7 +102,11 @@ const gameSlice = createSlice({
         player === Player.PlayerA ? state.playerAGrid : state.playerBGrid;
 
       for (let i = 0; i < ship.length; i++) {
-        const gridCell = playerGrid[row][column + i];
+        const gridCell =
+          ship.alignment === ShipAlignment.Horizontal
+            ? playerGrid[row][column + i]
+            : playerGrid[row + i][column];
+
         gridCell.occupied = true;
         gridCell.shipId = ship.id;
       }

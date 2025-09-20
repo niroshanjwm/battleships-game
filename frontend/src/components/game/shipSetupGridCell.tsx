@@ -2,7 +2,7 @@ import { setPlayerShips } from "@/redux/slices/game/gameSlice";
 import { dropShip } from "@/redux/slices/ship/shipThunk";
 import { useAppDispatch } from "@/redux/store";
 import { Player } from "@/types/game";
-import { Ship } from "@/types/ship";
+import { AlignedShip, Ship } from "@/types/ship";
 import { useRef } from "react";
 import { useDrop } from "react-dnd";
 
@@ -25,7 +25,7 @@ const ShipSetupGridCell = ({
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "ship",
-    drop: (ship: Ship) => {
+    drop: (ship: AlignedShip) => {
       dispatch(
         dropShip({
           player,

@@ -8,7 +8,11 @@ import {
   SaveShipsResponse,
 } from "@/types/ship";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getPlayerGrid } from "@/redux/slices/ship/shipHelpers";
+import {
+  getPlayerGrid,
+  shipIsFitInGrid,
+  shipIsNotOverlappedInGrid,
+} from "@/redux/slices/ship/shipHelpers";
 import {
   setCurrentStep,
   setPlayerGridError,
@@ -56,20 +60,25 @@ export const dropShip = createAsyncThunk<
     dispatch(setPlayerGridError({ player, message: "" }));
 
     /** Check enough grid are available for the ship */
-    if (column + ship.length > 10) {
-      const message = `There is not enough space to put #${ship.id} ${ship.name}`;
+    const isShipFit = shipIsFitInGrid(row, column, ship);
+    if (!isShipFit) {
+      const message = `Can't allign ${ship.alignment}. There is not enough space to put #${ship.id} ${ship.name}`;
       dispatch(setPlayerGridError({ player, message }));
       return { status: false, message };
     }
 
     /** Validate dropping ship has overlap in grid */
-    for (let i = 0; i < ship.length; i++) {
-      const gridCell = playerGrid[row][column + i];
-      if (gridCell.occupied) {
-        const message = `Ship #${ship.id} ${ship.name} is obstruct with another ship`;
-        dispatch(setPlayerGridError({ player, message }));
-        return { status: false, message };
-      }
+    const isShipIsNotOverlappedInGrid = shipIsNotOverlappedInGrid(
+      row,
+      column,
+      ship,
+      playerGrid
+    );
+
+    if (isShipIsNotOverlappedInGrid) {
+      const message = `Can't allign ${ship.alignment}. Ship #${ship.id} ${ship.name} is obstruct with another ship`;
+      dispatch(setPlayerGridError({ player, message }));
+      return { status: false, message };
     }
 
     /** Drop ship into the grid */
