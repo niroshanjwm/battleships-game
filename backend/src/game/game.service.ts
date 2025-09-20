@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateGameDto } from '../dto/create-game.dto';
 import { CreateGameHitDto } from '../dto/create-game-hit.dto';
 import { CheckOwnerDefeatDto } from 'src/dto/check-owner-defeat.dto';
+import { GetGameStatsDto } from 'src/dto/get-game-stats-dto';
 
 @Injectable()
 export class GameService {
@@ -62,5 +63,35 @@ export class GameService {
 
     // If all the ships in board are hitted then owner is defeated
     return shipsInGameBoard.every((ship) => ship.isHit);
+  }
+
+  async getStats(getGameStatsDto: GetGameStatsDto) {
+    const { gameId, boardOwner } = getGameStatsDto;
+
+    const gameHits = this.prisma.gameBoard.findMany({
+      select: {
+        row: true,
+        column: true,
+        shipId: true,
+        isHit: true,
+        updatedAt: true, // updatedAt is the time of the hit for each grid cell
+        ship: {
+          select: {
+            name: true,
+            length: true,
+          },
+        },
+      },
+      where: {
+        gameId,
+        boardOwner,
+        isHit: true,
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+    });
+
+    return gameHits;
   }
 }

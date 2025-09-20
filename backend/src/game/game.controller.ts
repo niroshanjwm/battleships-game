@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ZodValidationPipe } from 'src/pipelines/validation';
 import { CreateGameSchema } from '../dto/create-game.dto';
 import { GameService } from 'src/game/game.service';
@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { SaveShipSchema } from '../dto/save-game-ships.dto';
 import { CreateGameHitSchema } from '../dto/create-game-hit.dto';
 import { ShipService } from 'src/ship/ship.service';
+import { GetGameStatsSchema } from 'src/dto/get-game-stats-dto';
 
 @Controller('game')
 export class GameController {
@@ -53,5 +54,14 @@ export class GameController {
     ]);
 
     return { status: true, sunkShips, isBoardOwnerDefeat };
+  }
+
+  @Get('/stats')
+  async stats(
+    @Query(new ZodValidationPipe(GetGameStatsSchema))
+    query: z.infer<typeof GetGameStatsSchema>,
+  ) {
+    const hits = await this.game.getStats(query);
+    return { status: true, hits };
   }
 }
