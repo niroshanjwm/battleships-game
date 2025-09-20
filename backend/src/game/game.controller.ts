@@ -39,7 +39,7 @@ export class GameController {
     await this.game.saveGameHits(body);
     const sunkShips = await this.ship.getSunkShips({
       gameId: body.gameId,
-      player: body.player,
+      boardOwner: body.boardOwner,
     });
 
     return { status: true, sunkShips };

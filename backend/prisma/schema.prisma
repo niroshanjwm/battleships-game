@@ -30,7 +30,8 @@ model Ship {
 
 model GameBoard {
   id        Int      @id @default(autoincrement())
-  player    String   @db.VarChar(7)
+  // The value of this field either PlayerA or PlayerB, so varchar(7) is match with the character length
+  boardOwner    String   @db.VarChar(7)
   gameId    Int
   row       Int
   column    Int
@@ -43,5 +44,5 @@ model GameBoard {
   game      Game   @relation(fields: [gameId], references: [id])
   ship      Ship?  @relation(fields: [shipId], references: [id])
 
-  @@unique([player, gameId, row, column])
+  @@unique([boardOwner, gameId, row, column])
 }

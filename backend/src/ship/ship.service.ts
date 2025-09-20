@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable } from '@nestjs/common';
 import { GetSunkShipDto } from 'src/game/dto/get-sunk-ship-dto';
 import { SaveShipDto } from 'src/game/dto/save-game-ships.dto';
@@ -16,7 +17,7 @@ export class ShipService {
 
     const gridData = grid.flatMap((row, rowIndex) =>
       row.map((cell, columnIndex) => ({
-        player,
+        boardOwner: player,
         gameId,
         row: rowIndex,
         column: columnIndex,
@@ -37,7 +38,7 @@ export class ShipService {
   }
 
   async getSunkShips(getSunkShipDto: GetSunkShipDto) {
-    const { player, gameId } = getSunkShipDto;
+    const { boardOwner, gameId } = getSunkShipDto;
     const gameShots = await this.prisma.gameBoard.findMany({
       select: {
         shipId: true,
@@ -50,7 +51,7 @@ export class ShipService {
       },
       where: {
         gameId,
-        player,
+        boardOwner,
         NOT: { shipId: null },
         isHit: true,
       },
@@ -73,7 +74,7 @@ export class ShipService {
         shipHits[shipId] = {
           shipId,
           name: shot.ship?.name as string,
-          length: shot.ship?.length as number,
+          length: shot.ship!.length as number,
           successfulHits: 0,
           isSunk: false,
         };

@@ -15,11 +15,11 @@ export class GameService {
 
   async saveGameHits(createGameHit: CreateGameHitDto) {
     try {
-      const { player, gameId, row, column } = createGameHit;
+      const { boardOwner, gameId, row, column } = createGameHit;
       return this.prisma.gameBoard.update({
         where: {
-          player_gameId_row_column: {
-            player,
+          boardOwner_gameId_row_column: {
+            boardOwner,
             gameId,
             row,
             column,

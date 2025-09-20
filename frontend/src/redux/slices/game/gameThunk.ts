@@ -41,7 +41,7 @@ export const playerHit = createAsyncThunk(
     try {
       // even the API is getting failed the game can be play continuously, only sunk ships are not available
       const response = await post<CreateGameHitResponse>(`/game/hit`, {
-        player: boardOwner, // need to refactor to change the field name as boardOwner
+        boardOwner,
         row,
         column,
         gameId,
